@@ -1,4 +1,4 @@
-import Reaxt, { Component } from "react";
+import React, { Component } from "react";
 import TutorialDataService from "../services/tutorial.service";
 
 export default class AddTutorial extends Component {
@@ -33,7 +33,8 @@ export default class AddTutorial extends Component {
 
     saveTutorial(){
         var data = {
-            titulo: this.state.descricao
+            titulo: this.state.titulo,
+            descricao: this.state.descricao
         };
 
         TutorialDataService.create(data) .then(response => {

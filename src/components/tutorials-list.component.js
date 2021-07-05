@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import TutorialDataService from "../services/tutorial.service";
-import { link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default class TutorialsList  extends Component {
-    constructor(props){
+export default class TutorialsList extends Component {
+    constructor(props) {
         super(props);
         this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
         this.retrieveTutorials = this.retrieveTutorials.bind(this);
@@ -20,11 +20,11 @@ export default class TutorialsList  extends Component {
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.retrieveTutorials();
     }
 
-    onChangeSearchTitle(e){
+    onChangeSearchTitle(e) {
         const searchTitle = e.target.value;
 
         this.setState({
@@ -32,19 +32,19 @@ export default class TutorialsList  extends Component {
         });
     }
 
-    retrieveTutorials(){
+    retrieveTutorials() {
         TutorialDataService.getAll().then(response => {
             this.setState({
                 tutorials: response.data
             });
             console.log(response.data);
         })
-        .catch(e => {
-            console.log(e);
-        });
+            .catch(e => {
+                console.log(e);
+            });
     }
 
-    refreshList(){
+    refreshList() {
         this.retrieveTutorials();
         this.setState({
             currentTutorial: null,
@@ -52,36 +52,42 @@ export default class TutorialsList  extends Component {
         });
     }
 
-    setActiveTutorial(tutorial, index){
+    setActiveTutorial(tutorial, index) {
         this.setState({
             currentTutorial: tutorial,
             currentIndex: index
         });
     }
 
-    removeAllTutorials(){
+    removeAllTutorials() {
         TutorialDataService.deleteAll().then(response => {
             console.log(response.data);
             this.refreshList();
         })
-        .catch(e => {
-            console.log(e);
-        });
-    }
-
-    searchTitle(){
-        TutorialDataService.findByTitle(this.state.searchTitle).then(response => {
-            this.setState({
-                tutorials: response.data
+            .catch(e => {
+                console.log(e);
             });
-            console.log(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        });
     }
 
-    render(){
+    searchTitle() {
+        this.setState({
+            currentTutorial: null,
+            currentIndex: -1
+        });
+
+        TutorialDataService.findByTitle(this.state.searchTitle)
+            .then(response => {
+                this.setState({
+                    tutorials: response.data
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    render() {
         const {
             searchTitle, tutorials, currentTutorial, currentIndex
         } = this.state;
@@ -105,8 +111,8 @@ export default class TutorialsList  extends Component {
                         {tutorials && tutorials.map((tutorial, index) => (
                             <li className={"list-group-item" + (index === currentIndex ? "active" : "")}
 
-                            onClick={() => this.setActiveTutorial(tutorial, index)}
-                            key={index}>
+                                onClick={() => this.setActiveTutorial(tutorial, index)}
+                                key={index}>
                                 {tutorial.titulo}
                             </li>
                         ))}
@@ -122,33 +128,37 @@ export default class TutorialsList  extends Component {
                             <h4>Tutorial</h4>
                             <div>
                                 <label>
-                                    <strong>Titulo: </strong>
+                                    <strong>Title:</strong>
                                 </label>{" "}
                                 {currentTutorial.titulo}
                             </div>
-                        </div>
-                        <label>
-                            <strong>Descrição</strong>
-                        </label>{" "}
-                        {currentTutorial.descricao}
-                    </div>
-                    <div>
-                        <label>
-                            <strong>Status: </strong>
-                        </label> {" "}
-                        {currentTutorial.publicado ? "Publicado" : "Pendente"}
-                    </div>
-                    <link to={"/tutorials" + currentTutorial.id} className="badge badge-warning">
-                        Editar
-                    </link>
-                </div>
-                ) : ( 
+                            <div>
+                                <label>
+                                    <strong>Description:</strong>
+                                </label>{" "}
+                                {currentTutorial.descricao}
+                            </div>
+                            <div>
+                                <label>
+                                    <strong>Status:</strong>
+                                </label>{" "}
+                                {currentTutorial.publicado ? "Publicado" : "Pendente"}
+                            </div>
 
-                <div>
-                    <br/>
-                    <p>Por favor clique no tutorial</p>
+                            <Link
+                                to={"/tutorials/" + currentTutorial.id}
+                                className="badge badge-warning"
+                            >
+                                Edit
+                            </Link>
+                        </div>
+                    ) : (
+                        <div>
+                            <br />
+                            <p>Por Favor clique em um tutorial...</p>
+                        </div>
+                    )}
                 </div>
-                )}
             </div>
         );
     }

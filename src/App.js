@@ -13,28 +13,28 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <a href="/tutorials" className="navbar-brand">
+          <Link to={"/tutorials"} className="navbar-brand">
             DTP Tecnologias
-          </a>
+          </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <link to={"/tutorials"} className="nav-link">
+              <Link to={"/tutorials"} className="nav-link">
                 Tutoriais
-              </link>
+              </Link>
             </li>
             <li className="nav-item">
-              <link to={"/add"} className="nav-link">
+              <Link to={"/add"} className="nav-link">
                 Adicionar
-              </link>
+              </Link>
             </li>
           </div>
         </nav>
         <div className="container mt-3">
-          <switch>
+          <Switch>
             <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
             <Route exact path="/add" component={AddTutorial} />
             <Route path="/tutorials/:id" component={Tutorial}/>
-          </switch>
+          </Switch>
         </div>
       </div>
     );
